@@ -1,0 +1,14 @@
+<Solution>
+  <Folder Name="/src/" />
+  <Folder Name="/src/Core/">
+    <Project Path="src/Core/FIAP.Application/FIAP.Application.csproj" Id="4bee2068-6eeb-4fa9-9523-bd52983f923c" />
+    <Project Path="src/Core/FIAP.Domain/FIAP.Domain.csproj" Id="58d203c9-3e6b-41d9-a6fa-3b40167aa63b" />
+    <Project Path="src/Core/FIAp.Exception/FIAp.Exception.csproj" Id="1a6c543a-4ad3-4db6-8930-88d759daf85d" />
+  </Folder>
+  <Folder Name="/src/infra/">
+    <Project Path="src/infra/FIAP.Infrastructure/FIAP.Infrastructure.csproj" Id="14e7ad5a-1a9a-4b25-a2ab-4da61003fe68" />
+  </Folder>
+  <Folder Name="/src/presentation/">
+    <Project Path="src/presentation/FIAP.UsersAPI/FIAP.UsersAPI.csproj" Id="cea11f1e-5156-440c-96d6-e7d121f448aa" />
+  </Folder>
+</Solution>

@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: users-api-config
+  labels:
+    app: users-api
+data:
+  # Non-sensitive configuration
+  ASPNETCORE_ENVIRONMENT: "Production"
+  ASPNETCORE_URLS: "http://+:8080"
+  RabbitMq__Host: "rabbitmq"
+  Settings__Jwt__Issuer: "FCG"
+  Settings__Jwt__Audience: "FCG.Clients"
+  Settings__Jwt__ExpiresMinutes: "60"
+  Settings__Seed__AdminName: "Administrator"
+  Settings__Seed__AdminEmail: "admin@fcg.com"

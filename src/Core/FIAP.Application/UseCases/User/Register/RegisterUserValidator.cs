@@ -1,0 +1,20 @@
+﻿using FIAP.Domain.Communication.Requests;
+using FluentValidation;
+
+namespace FIAP.Application.UseCases.User.Register;
+
+public class RegisterUserValidator : AbstractValidator<RequestRegisterUserJson>
+{
+    public RegisterUserValidator()
+    {
+        RuleFor(u => u.Name).NotEmpty().WithMessage("Name Empty.");
+        RuleFor(u => u.Email)
+            .NotEmpty()
+            .WithMessage("Email Empty.")
+            .EmailAddress()
+            .When(u => string.IsNullOrWhiteSpace(u.Email) == false, ApplyConditionTo.CurrentValidator)
+            .WithMessage("Email Invalid.");
+
+        RuleFor(u => u.Password).SetValidator(new PasswordValidator<RequestRegisterUserJson>());
+    }
+}
