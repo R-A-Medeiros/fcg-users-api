@@ -41,6 +41,7 @@ users-api/
 | POST   | `/api/User/register` | Cria um usuário e publica `UserCreatedEvent`          |
 | POST   | `/api/Login/login`   | Autentica e retorna um token JWT                      |
 | GET    | `/health`            | Health check                                          |
+| GET    | `/swagger`           | Swagger UI                                            |
 | GET    | `/scalar/v1`         | Documentação interativa da API (OpenAPI)              |
 
 ### Exemplo de cadastro
@@ -48,15 +49,18 @@ users-api/
 ```bash
 curl -X POST http://localhost:5001/api/User/register \
   -H "Content-Type: application/json" \
-  -d '{ "name": "Alice", "email": "alice@example.com", "password": "secret123" }'
+  -d '{ "name": "Alice", "email": "alice@example.com", "password": "Secret@123" }'
 ```
+
+> A senha exige no mínimo 8 caracteres, com letra maiúscula, minúscula, número e um caractere
+> especial entre `! @ # $ % & * .`
 
 ### Exemplo de login
 
 ```bash
 curl -X POST http://localhost:5001/api/Login/login \
   -H "Content-Type: application/json" \
-  -d '{ "email": "alice@example.com", "password": "secret123" }'
+  -d '{ "email": "alice@example.com", "password": "Secret@123" }'
 ```
 
 ## Variáveis de ambiente
@@ -71,10 +75,17 @@ use o separador `__` (ex.: `Settings__Jwt__SigningKey`).
 | `Settings__Jwt__Issuer`         | Emissor do token                                 | `FCG`                                                                   |
 | `Settings__Jwt__Audience`       | Audiência do token                               | `FCG.Clients`                                                           |
 | `Settings__Jwt__ExpiresMinutes` | Validade do token em minutos                     | `60`                                                                    |
+| `Settings__Seed__AdminName`     | Nome do administrador semeado na subida          | `Administrator`                                                         |
+| `Settings__Seed__AdminEmail`    | E-mail do administrador semeado                  | `admin@fcg.com`                                                         |
+| `Settings__Seed__AdminPassword` | Senha do administrador semeado (**secret**)      | `Admin@123`                                                             |
 | `RabbitMq__Host`                | Host do RabbitMQ                                  | `rabbitmq`                                                              |
 | `RabbitMq__Username`            | Usuário do RabbitMQ (**secret**)                 | `guest`                                                                 |
 | `RabbitMq__Password`            | Senha do RabbitMQ (**secret**)                   | `guest`                                                                 |
 | `ASPNETCORE_URLS`               | URL de escuta do Kestrel                          | `http://+:8080`                                                         |
+
+> Na subida, o serviço cria um usuário administrador (idempotente) a partir de `Settings__Seed__*`.
+> É ele quem pode cadastrar, editar e remover jogos no CatalogAPI. Se o e-mail ou a senha não
+> forem configurados, o seed é ignorado.
 
 > A `Settings__Jwt__SigningKey` **deve ser idêntica** à `Jwt:SecretKey` do CatalogAPI,
 > que valida o token emitido aqui. O token é emitido com `Issuer=FCG` e
@@ -83,7 +94,8 @@ use o separador `__` (ex.: `Settings__Jwt__SigningKey`).
 ## Banco de dados (migrations)
 
 Um script SQL idempotente já vem pronto em [`db/init.sql`](db/init.sql) e é aplicado
-automaticamente pelo `docker-compose` da raiz (ver README principal). Para aplicar
+automaticamente pelo `docker-compose.yml` do repositório
+[`fcg-orchestration`](https://github.com/R-A-Medeiros/fcg-orchestration) (ver o README dele). Para aplicar
 manualmente:
 
 ```bash
@@ -128,7 +140,8 @@ dotnet ef migrations script --idempotent \
 dotnet run --project src/presentation/FIAP.UsersAPI
 ```
 
-Requer um PostgreSQL e um RabbitMQ acessíveis (veja o `docker-compose.yml` na raiz).
+Requer um PostgreSQL e um RabbitMQ acessíveis (veja o `docker-compose.yml` do repositório
+[`fcg-orchestration`](https://github.com/R-A-Medeiros/fcg-orchestration)).
 
 ## Docker
 
